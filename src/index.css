@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   PTIT CAREER HUB - SOFT RED PTIT GLOBAL SELECTION (PHƯƠNG ÁN 2)
+   ========================================================================== */
+
+/* Áp dụng màu bôi đen đỏ hồng pastel rõ nét, đồng bộ thương hiệu PTIT */
+::selection {
+  background-color: #FECDD3 !important; /* Nền đỏ hồng pastel đậm vừa, rõ ràng */
+  color: #881337 !important;            /* Chữ đỏ đô đậm sắc nét, tương phản cao */
+}
+
+::-moz-selection {
+  background-color: #FECDD3 !important;
+  color: #881337 !important;
+}
+
+input::selection,
+textarea::selection {
+  background-color: #FECDD3 !important;
+  color: #881337 !important;
+}
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.material-symbols-outlined.fill {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

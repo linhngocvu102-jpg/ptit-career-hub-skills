@@ -1,0 +1,82 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user has admin role
+    function isAdmin() {
+      return request.auth != null && (
+        request.auth.token.email == 'dulieu.obdhanoi@gmail.com' ||
+        request.auth.token.email == 'Linhngocvu102@gmail.com' ||
+        request.auth.token.email == 'linhngocvu102@gmail.com' ||
+        request.auth.token.email == 'enzu2703@gmail.com' ||
+        request.auth.token.email == 'Enzu2703@gmail.com' ||
+        request.auth.token.email == 'nplinh715@gmail.com' ||
+        request.auth.token.email == 'Nplinh715@gmail.com' ||
+        request.auth.token.role == 'admin' ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin') ||
+        (request.auth.token.email != null && exists(/databases/$(database)/documents/authorized_admins/$(request.auth.token.email)))
+      );
+    }
+
+    // Connection test document
+    match /test/{testId} {
+      allow read: if true;
+    }
+
+    // Jobs Collection:
+    // All users on any browser/device can read jobs from Firestore
+    // Admin has full CRUD permissions, authenticated users can write/seed
+    match /jobs/{jobId} {
+      allow read: if true;
+      allow write: if isAdmin() || request.auth != null;
+    }
+
+    // Events Collection:
+    // All users on any browser/device can read events from Firestore
+    // Admin has full CRUD permissions, authenticated users can write/seed
+    match /events/{eventId} {
+      allow read: if true;
+      allow write: if isAdmin() || request.auth != null;
+    }
+
+    // System Letters Collection:
+    // All users can read letters and bulletins from Firestore
+    // Admin has full CRUD permissions, authenticated users can write/seed
+    match /system_letters/{letterId} {
+      allow read: if true;
+      allow write: if isAdmin() || request.auth != null;
+    }
+
+    // Notifications Collection:
+    match /notifications/{notificationId} {
+      allow read: if true;
+      allow write: if isAdmin() || request.auth != null;
+    }
+
+    // News Collection:
+    match /news/{newsId} {
+      allow read: if true;
+      allow write: if isAdmin() || request.auth != null;
+    }
+
+    // Users Collection:
+    // Student can read and write their own profile
+    // Admin can read all user data for reporting
+    match /users/{userId} {
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow write: if request.auth != null && (request.auth.uid == userId || isAdmin());
+    }
+
+    // Interactions Collection (Telemetry & Engagement analytics):
+    match /interactions/{interactionId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Authorized Admins Collection:
+    match /authorized_admins/{adminEmail} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}
